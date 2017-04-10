@@ -1,0 +1,41 @@
+{
+  "name": "global-alert-wrapper",
+  "authors": [
+    "Robert Taraya <robert.taraya@gmail.com>"
+  ],
+  "description": "Event-driven, Bootstrap-like alert messages",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "alert",
+    "alerts",
+    "alert-messages",
+    "polymer"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/roberttaraya/global-alert-wrapper.git"
+  },
+  "homepage": "https://github.com/roberttaraya/global-alert-wrapper",
+  "license": "MIT",
+  "main": "global-alert-wrapper.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "_release": "29dc489aba",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "29dc489aba114fe1e20937053ebed0518b97649a"
+  },
+  "_source": "https://github.com/roberttaraya/global-alert-wrapper.git",
+  "_target": "master",
+  "_originalSource": "roberttaraya/global-alert-wrapper",
+  "_direct": true
+}

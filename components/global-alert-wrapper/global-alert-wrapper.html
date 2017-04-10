@@ -1,0 +1,254 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="./styles/">
+
+<!--
+# global-alert-wrapper
+
+Event-driven, Bootstrap-like alert messages
+
+## Installation
+
+Install the component using [Bower](http://bower.io/):
+
+```
+$ bower install --save roberttaraya/global-alert-wrapper
+```
+
+## Usage
+
+### Wrap your main component
+
+```
+<global-alert-wrapper>
+  <your-cool-app></your-cool-app>
+</global-alert-wrapper>
+```
+
+### Or wrap the contents of your main component
+
+```
+<dom-module id="your-cool-app">
+  <template>
+    <div class="container">
+      <global-alert-wrapper>
+        ...your code here...
+      </global-alert-wrapper>
+    </div>
+  </template>
+</dom-module>
+```
+
+### Show Event
+
+  `show-alert-message`: this event shows the alert message. Requires a type.
+
+  Allowed values for `type`:
+    `success`, `info`, `warning`, and `danger`
+
+### Basic Alerts
+
+  ```
+  this.fire("show-alert-message", {
+    type: "info",
+    message: "Your campaign has been saved as a draft."
+  });
+  ```
+
+  If you're using a basic alert message, you'll have to fire a close event to close it.
+
+### Close Event
+
+  `close-alert-message`: this message closes (hides) the alert message
+
+
+  ```
+  this.fire("close-alert-message");
+  ```
+
+### Auto Dismissible Alerts
+
+  ```
+  this.fire("show-alert-message", {
+    type: "success",
+    message: "Email sent.",
+    timeout: 3000
+  });
+  ```
+
+### Dismissible Alerts
+
+  ```
+  this.fire("show-alert-message", {
+    type: "info",
+    message: "Your campaign has been saved as a draft.",
+    dismissible: true
+  });
+  ```
+
+## Contributing
+
+1. Fork it!
+2. Create your feature branch: `git checkout -b my-new-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin my-new-feature`
+5. Submit a pull request :D
+
+## License
+
+[MIT License](http://opensource.org/licenses/MIT)
+
+@demo demo/index.html
+-->
+
+
+<dom-module id="global-alert-wrapper">
+  <template>
+    <style include="styles">
+      #alert-message {
+        left: 50%;
+        margin-left: -25%;
+        position: fixed;
+        top: 10px;
+        width: 50%;
+      }
+
+      #alert-message.hidden {
+        display: none;
+      }
+
+    </style>
+    <div id="alert-message" class$="[[_getHiddenClass(_hidden)]]">
+      <div class$="alert alert-[[type]] [[_getDismissibleClass(dismissible)]]">
+        <template is="dom-if" if="[[dismissible]]">
+          <button type="button" aria-hidden='true' class="close" on-tap="handleCloseAlert">
+            <span aria-hidden='true'>&times;</span>
+          </button>
+        </template>
+        <h4 class="alert-heading">
+          <iron-icon class="alert-icon" icon$="font-awesome:[[icon]]"></iron-icon>
+          [[_getAlertTitle(type)]]
+        </h4>
+        [[message]]
+      </div>
+    </div>
+    <content></content>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'global-alert-wrapper',
+
+      properties: {
+        dismissible: {
+          type: Boolean,
+          value: false,
+        },
+
+        message: {
+          type: String,
+        },
+
+        timeout: {
+          type: Number,
+        },
+
+        type: {
+          type: String,
+          observer: "_handleSetIcons",
+        },
+
+        _hidden: {
+          type: Boolean,
+          value: true,
+        },
+      },
+
+      listeners: {
+        "show-alert-message": "handleShowAlert",
+        "close-alert-message": "handleCloseAlert",
+      },
+
+      handleShowAlert: function(e, detail) {
+        e.stopPropagation();
+
+        this._setAlertProperties(
+          detail.type,
+          detail.message,
+          detail.dismissible,
+          detail.timeout);
+        this.set("_hidden", false);
+      },
+
+      handleCloseAlert: function() {
+        this.set("_hidden", true);
+      },
+
+      _handleAutoCloseAlert: function() {
+        setTimeout(this.handleCloseAlert.bind(this), this.timeout);
+      },
+
+      _handleSetIcons: function(type) {
+        switch (type) {
+          case "success":
+            this.set("icon", "fa-check-circle");
+            break;
+
+          case "info":
+            this.set("icon", "fa-info-circle");
+            break;
+
+          case "warning":
+            this.set("icon", "fa-exclamation-triangle");
+            break;
+
+          case "danger":
+            this.set("icon", "fa-minus-circle");
+            break;
+
+          default:
+            this.set("icon", "fa-info-circle");
+        }
+      },
+
+      _getHiddenClass: function(_hidden) {
+        var hiddenClass = "";
+        if (_hidden) {
+          hiddenClass += "hidden";
+        }
+        return hiddenClass;
+      },
+
+      _getDismissibleClass: function(dismissible) {
+        var dismissibleClass = "";
+        if (dismissible) {
+          dismissibleClass += "alert-dismissible";
+        }
+        return dismissibleClass;
+      },
+
+      _getAlertTitle: function(type) {
+        return type.toUpperCase();
+      },
+
+      _setAlertProperties: function(type, message, dismissible, timeout) {
+        var validAlertTypes = ["success", "info", "warning", "danger"];
+
+        if (validAlertTypes.indexOf(type) <  0) {
+          type = "danger";
+          message = "You have entered an invalid alert type.";
+        }
+
+        if (timeout) {
+          this.set("timeout", timeout);
+          this._handleAutoCloseAlert();
+        }
+
+        this.set("dismissible", dismissible);
+        this.set("message", message);
+        this.set("type", type);
+      },
+    });
+  </script>
+</dom-module>
