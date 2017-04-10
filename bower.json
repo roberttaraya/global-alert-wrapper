@@ -13,6 +13,11 @@
     "alert-messages",
     "polymer"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/roberttaraya/global-alert-wrapper.git"
+  },
+  "homepage": "https://github.com/roberttaraya/global-alert-wrapper",
   "license": "MIT",
   "main": "global-alert-wrapper.html",
   "dependencies": {
