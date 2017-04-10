@@ -1,14 +1,55 @@
-# global-alert-wrapper
+# \<global-alert-wrapper\>
 
 Event-driven, Bootstrap-like alert messages
 
 ## Installation
 
-TODO: Describe the installation process
+Install the component using [Bower](http://bower.io/):
+
+```
+$ bower install --save roberttaraya/global-alert-wrapper
+```
 
 ## Usage
 
-TODO: Write usage instructions
+### Show Event
+  `show-alert-message`: this event shows the alert message. Requires a type.
+
+  Allowed values for `type`:
+    `success`, `info`, `warning`, and `danger`
+
+### Basic Alerts
+
+  ```
+  this.fire("show-alert-message", {
+    type: "info",
+    message: "Your campaign has been saved as a draft."
+  });
+  ```
+### Auto Dismissible Alerts
+  ```
+  this.fire("show-alert-message", {
+    type: "success",
+    message: "Email sent.",
+    timeout: 3000
+  });
+  ```
+### Dismissible Alerts
+  ```
+  this.fire("show-alert-message", {
+    type: "info",
+    message: "Your campaign has been saved as a draft.",
+    dismissible: true
+  });
+  ```
+
+### Close Event
+  `close-alert-message`: this message closes (hides) the alert message
+
+
+  ```
+  this.fire("close-alert-message");
+  ```
 
 ## Contributing
 
