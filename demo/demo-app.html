@@ -1,0 +1,105 @@
+<link rel="import" href="../../polymer/polymer.html">
+
+<!--
+`global-alert-wrapper`
+Event-driven, Bootstrap-like alert messages
+
+@demo demo/index.html
+-->
+
+
+<dom-module id="demo-app">
+  <template>
+    <style include="styles">
+      :host {
+        display: block;
+      }
+      .container {
+        border: 1px solid black;
+        padding: 10px 20px;
+        margin-bottom: 10px;
+      }
+      button {
+        margin: 20px 0;
+      }
+      button.close-event {
+        margin: 0;
+      }
+    </style>
+
+    <div class="container">
+      <h4>Demo App</h4>
+      Press a button to fire that alert type...
+      <br>
+      <button on-tap="_handleFireSuccessAlert">Success</button>
+      <button on-tap="_handleFireInfoAlert">Information</button>
+      <button on-tap="_handleFireWarningAlert">Warning</button>
+      <button on-tap="_handleFireDangerAlert">Danger</button>
+      <template is="dom-if" if="[[closeEvent]]">
+        <p>Fire a close event to close the alert message</p>
+        <button class="close-event" on-tap="_handleFireCloseAlert">Close</button>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'demo-app',
+
+      properties: {
+        closeEvent: {
+          type: Boolean,
+          value: false,
+        },
+        dismissible: {
+          type: Boolean,
+          value: false,
+        },
+        timeout: {
+          type: Number,
+        },
+      },
+
+      _handleFireSuccessAlert: function() {
+        this.fire("show-alert-message", {
+          type: "success",
+          message: "Indicates a successful or positive action.",
+          timeout: this.timeout,
+          dismissible: this.dismissible,
+        })
+      },
+
+      _handleFireInfoAlert: function() {
+        this.fire("show-alert-message", {
+          type: "info",
+          message: "Indicates a neutral informative change or action.",
+          timeout: this.timeout,
+          dismissible: this.dismissible,
+        })
+      },
+
+      _handleFireWarningAlert: function() {
+        this.fire("show-alert-message", {
+          type: "warning",
+          message: "Indicates a warning that might need attention.",
+          timeout: this.timeout,
+          dismissible: this.dismissible,
+        })
+      },
+
+      _handleFireDangerAlert: function() {
+        this.fire("show-alert-message", {
+          type: "danger",
+          message: "Indicates a dangerous or potentially negative action.",
+          timeout: this.timeout,
+          dismissible: this.dismissible,
+        })
+      },
+
+      _handleFireCloseAlert: function() {
+        this.fire("close-alert-message");
+      }
+    });
+  </script>
+</dom-module>
