@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>global-alert-wrapper test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../global-alert-wrapper.html">
+  </head>
+  <body>
+    <test-fixture id="basic">
+      <template>
+        <global-alert-wrapper></global-alert-wrapper>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('global-alert-wrapper', function() {
+        var element;
+
+        setup(function() {
+          element = fixture('basic');
+        });
+
+        test('instantiating the element works', function() {
+          assert.notEqual(element.constructor.name, 'HTMLObject');
+        });
+
+        test('element is hidden by default', function() {
+          assert.equal(element._hidden, true);
+        });
+
+        suite('when a show-alert-message event is fired', function() {
+          var e, detail;
+
+          setup(function() {
+            e = new CustomEvent('show-alert-message');
+            detail = {
+              "type": "info",
+              "message": "Robert is super cool."
+            }
+          });
+
+          test('#handleShowAlert sets hidden to false', function() {
+            assert.equal(element._hidden, true);
+            element.handleShowAlert(e, detail);
+            assert.equal(element._hidden, false);
+          });
+
+          test('type property is set', function() {
+            element.handleShowAlert(e, detail);
+            assert.equal(element.type, detail.type);
+          });
+
+          test('message property is set', function() {
+            element.handleShowAlert(e, detail);
+            assert.equal(element.message, detail.message);
+          });
+
+          suite('when the dismissible property is set', function() {
+            setup(function() {
+              detail = {
+                "type": "info",
+                "message": "Robert is super cool.",
+                "dismissible": true
+              }
+            });
+
+            test('it sets dismissible to true', function() {
+              element.handleShowAlert(e, detail);
+              assert.equal(element.dismissible, detail.dismissible)
+            });
+          });
+
+          suite('when the timeout property is set', function() {
+            setup(function() {
+              detail = {
+                "type": "info",
+                "message": "Robert is super cool.",
+                "timeout": 3000
+              }
+            });
+
+            test('it sets timeout to 3000', function() {
+              element.handleShowAlert(e, detail);
+              assert.equal(element.timeout, detail.timeout)
+            });
+          });
+
+          suite('when trying to set an invalid alert type', function() {
+            var validType, validMessage;
+
+            setup(function() {
+              detail = {
+                "type": "I'm not your type",
+                "message": "I'm not that into you!"
+              }
+              validType = "danger";
+              validMessage = "You have entered an invalid alert type.";
+            });
+
+            test('#handleShowAlert sets type to "danger"', function() {
+              element.handleShowAlert(e, detail);
+              assert.notEqual(detail.type, validType)
+              assert.equal(element.type, validType)
+            })
+
+            test('#handleShowAlert sets message to "You have entered an invalid alert type."', function() {
+              element.handleShowAlert(e, detail);
+              assert.notEqual(detail.message, validMessage)
+              assert.equal(element.message, validMessage)
+            })
+          })
+        });
+
+        suite('when a close-alert-message event is fired', function() {
+          setup(function() {
+            element._hidden = false;
+          });
+
+          test('#handleCloseAlert sets hidden to true', function() {
+            assert.equal(element._hidden, false);
+            element.handleCloseAlert();
+            assert.equal(element._hidden, true);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
